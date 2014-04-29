@@ -73,7 +73,7 @@ local function explode_phrase()
   local selection = renoise.song().selection_in_pattern
 
   for i, line in ipairs(lines) do
-    local pattern_line = track:line(i)
+    local pattern_line = track:line(selection.start_line + i - 1)
     pattern_line:copy_from(line)
   end
 end
