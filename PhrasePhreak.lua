@@ -58,4 +58,26 @@ local function extract_phrase()
   end
 end
 
-extract_phrase()
+local function explode_phrase()
+  -- check if there's a phrase command beneath the cursor
+  -- look up phrase in instrument
+  -- copy instrument lines to pattern
+  local pin = renoise.song().selected_pattern_index
+  local tin = renoise.song().selected_track_index
+  local pattern_lines = renoise.song().pattern_iterator:lines_in_pattern_track(pin, tin)
+  local pattern = renoise.song().selected_pattern
+  local track = pattern:track(tin)
+
+  local phrase = renoise.song().selected_instrument:phrase(1)
+  local lines = phrase.lines
+  local selection = renoise.song().selection_in_pattern
+
+  for i, line in ipairs(lines) do
+    local pattern_line = track:line(i)
+    pattern_line:copy_from(line)
+  end
+end
+
+explode_phrase()
+
+-- extract_phrase()
