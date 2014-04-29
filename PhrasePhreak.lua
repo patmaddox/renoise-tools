@@ -61,7 +61,7 @@ end
 local function explode_phrase()
   -- check if there's a phrase command beneath the cursor
   -- look up phrase in instrument
-  -- copy instrument lines to pattern
+  -- copy instrument number to pattern line
   local pin = renoise.song().selected_pattern_index
   local tin = renoise.song().selected_track_index
   local pattern_lines = renoise.song().pattern_iterator:lines_in_pattern_track(pin, tin)
