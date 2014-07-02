@@ -5,11 +5,12 @@
 --- extract selection to phrase
 --- error if no open phrases
 --- use the next open note for phrase
+--- phrases are one note only
 
 -- TODO
 --- explode phrase to pattern
 --- explode pattern w/ different LPB
---- use previous phrase note range length
+---- use previous phrase note range length
 --- what happens if you select multiple tracks?
 
 -- renoise.song().patterns[].tracks[]:lines_in_range(index_from, index_to)
@@ -71,6 +72,11 @@ local function extract_phrase()
 
   local phrase = renoise.song().selected_instrument:phrase(phrase_index)
   phrase:clear()
+
+  local mapping = phrase.mapping
+  local base_note = phrase_index - 1
+  mapping.base_note = base_note
+  mapping.note_range = {base_note, base_note}
 
   local selection = renoise.song().selection_in_pattern
 
