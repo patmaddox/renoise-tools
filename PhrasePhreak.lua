@@ -3,11 +3,11 @@
 
 -- HISTORY
 --- extract selection to phrase
+--- error if no open phrases
+--- use the next open note for phrase
 
 -- TODO
 --- explode phrase to pattern
---- use the next open note for phrase
---- error if no open phrases
 --- explode pattern w/ different LPB
 --- use previous phrase note range length
 --- what happens if you select multiple tracks?
@@ -29,6 +29,14 @@ local function no_selection_error()
   renoise.app():show_error("Please select some notes in the pattern editor!")
 end
 
+local function no_available_phrase_error()
+  renoise.app():show_error("No phrase slots are available.")
+end
+
+local function can_insert_phrase_at(i)
+  return renoise.song().selected_instrument:can_insert_phrase_at(i)
+end
+
 local function extract_phrase()
   if renoise.song().selection_in_pattern == nil then
     no_selection_error()
@@ -38,20 +46,38 @@ local function extract_phrase()
   local pin = renoise.song().selected_pattern_index
   local tin = renoise.song().selected_track_index
   local lines = renoise.song().pattern_iterator:lines_in_pattern_track(pin, tin)
-  
-  if renoise.song().selected_instrument:can_insert_phrase_at(1) then
-    renoise.song().selected_instrument:insert_phrase_at(1)
+
+  local phrase_index = nil
+
+  for i=1, 120 do
+    local status, result = pcall(can_insert_phrase_at, i)
+
+    if status == false then -- eww, what's the right way?
+      break
+    end
+
+    if result then
+      phrase_index = i
+      break
+    end
   end
-    
-  local phrase = renoise.song().selected_instrument:phrase(1)
+  
+  if phrase_index == nil then
+    no_available_phrase_error()
+    return nil
+  end
+
+  renoise.song().selected_instrument:insert_phrase_at(phrase_index)
+
+  local phrase = renoise.song().selected_instrument:phrase(phrase_index)
   phrase:clear()
-  
+
   local selection = renoise.song().selection_in_pattern
-  
+
   for pos, line in lines do
     if pos.line > selection.end_line then break end
     if pos.line >= selection.start_line then
-    
+
       local phrase_line = phrase:line(pos.line)
       phrase_line:copy_from(line)
     end
@@ -79,6 +105,6 @@ local function explode_phrase()
   end
 end
 
-explode_phrase()
+-- explode_phrase()
 
--- extract_phrase()
+extract_phrase()
