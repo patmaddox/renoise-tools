@@ -117,3 +117,13 @@ end
 -- explode_phrase()
 
 -- extract_phrase()
+
+renoise.tool():add_menu_entry {
+  name = "--- Main Menu:Tools:PhrasePhreak:Extract Phrase",
+  invoke = extract_phrase
+}
+
+renoise.tool():add_keybinding {
+  name = "Pattern Editor:Selection:PhrasePhreak - Extract phrase",
+  invoke = extract_phrase
+}
