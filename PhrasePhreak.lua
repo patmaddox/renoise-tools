@@ -8,9 +8,10 @@
 --- phrases are one note only
 
 -- TODO
+--- set pattern length based on selection
 --- explode phrase to pattern
 --- explode pattern w/ different LPB
----- use previous phrase note range length
+--- use previous phrase note range length
 --- what happens if you select multiple tracks?
 
 -- renoise.song().patterns[].tracks[]:lines_in_range(index_from, index_to)
