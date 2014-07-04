@@ -6,9 +6,9 @@
 --- error if no open phrases
 --- use the next open note for phrase
 --- phrases are one note only
+--- set pattern length & lpb based on selection
 
 -- TODO
---- set pattern length based on selection
 --- explode phrase to pattern
 --- explode pattern w/ different LPB
 --- use previous phrase note range length
@@ -80,6 +80,8 @@ local function extract_phrase()
   mapping.note_range = {base_note, base_note}
 
   local selection = renoise.song().selection_in_pattern
+  phrase.number_of_lines = selection.end_line - selection.start_line + 1
+  phrase.lpb = renoise.song().transport.lpb
 
   for pos, line in lines do
     if pos.line > selection.end_line then break end
