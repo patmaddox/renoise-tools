@@ -74,9 +74,8 @@ local function prepare_phrase_at_index(phrase_index)
   return phrase
 end
 
-local function copy_selected_lines_to_phrase(phrase)
-  local selection = renoise.song().selection_in_pattern
-  phrase.number_of_lines = selection.end_line - selection.start_line + 1
+local function copy_selected_lines_to_phrase(selection, phrase)
+  phrase.number_of_lines = selection.number_of_lines
 
   local pin = renoise.song().selected_pattern_index
   local tin = renoise.song().selected_track_index
@@ -93,7 +92,13 @@ local function copy_selected_lines_to_phrase(phrase)
 end
 
 local function the_selection()
-  return renoise.song().selection_in_pattern
+  local selection = renoise.song().selection_in_pattern
+
+  return {
+    end_line = selection.end_line,
+    start_line = selection.start_line,
+    number_of_lines = selection.end_line - selection.start_line + 1
+  }
 end
 
 local function extract_phrase()
@@ -112,7 +117,7 @@ local function extract_phrase()
   end
 
   local phrase = prepare_phrase_at_index(phrase_index)
-  copy_selected_lines_to_phrase(phrase)
+  copy_selected_lines_to_phrase(selection, phrase)
 end
 
 local function explode_phrase()
