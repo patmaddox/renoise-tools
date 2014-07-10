@@ -41,12 +41,7 @@ local function can_insert_phrase_at(i)
   return renoise.song().selected_instrument:can_insert_phrase_at(i)
 end
 
-local function extract_phrase()
-  if renoise.song().selection_in_pattern == nil then
-    no_selection_error()
-    return nil
-  end
-
+local function next_available_phrase_index()
   local phrase_index = nil
 
   for i=1, 120 do
@@ -62,13 +57,10 @@ local function extract_phrase()
     end
   end
   
-  if phrase_index == nil then
-    no_available_phrase_error()
-    return nil
-  end
+  return phrase_index
+end
 
-  renoise.song().selected_instrument:insert_phrase_at(phrase_index)
-
+local function prepare_phrase_at_index(phrase_index)
   local phrase = renoise.song().selected_instrument:phrase(phrase_index)
   phrase:clear()
 
@@ -77,6 +69,25 @@ local function extract_phrase()
   mapping.base_note = base_note
   mapping.note_range = {base_note, base_note}
 
+  return phrase
+end
+
+local function extract_phrase()
+  if renoise.song().selection_in_pattern == nil then
+    no_selection_error()
+    return nil
+  end
+
+  local phrase_index = next_available_phrase_index()
+
+  if phrase_index == nil then
+    no_available_phrase_error()
+    return nil
+  end
+
+  renoise.song().selected_instrument:insert_phrase_at(phrase_index)
+
+  local phrase = prepare_phrase_at_index(phrase_index)
   local selection = renoise.song().selection_in_pattern
   phrase.number_of_lines = selection.end_line - selection.start_line + 1
   phrase.lpb = renoise.song().transport.lpb
