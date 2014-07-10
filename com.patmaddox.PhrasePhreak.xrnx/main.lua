@@ -46,10 +46,6 @@ local function extract_phrase()
     no_selection_error()
     return nil
   end
-  
-  local pin = renoise.song().selected_pattern_index
-  local tin = renoise.song().selected_track_index
-  local lines = renoise.song().pattern_iterator:lines_in_pattern_track(pin, tin)
 
   local phrase_index = nil
 
@@ -84,6 +80,10 @@ local function extract_phrase()
   local selection = renoise.song().selection_in_pattern
   phrase.number_of_lines = selection.end_line - selection.start_line + 1
   phrase.lpb = renoise.song().transport.lpb
+
+  local pin = renoise.song().selected_pattern_index
+  local tin = renoise.song().selected_track_index
+  local lines = renoise.song().pattern_iterator:lines_in_pattern_track(pin, tin)
 
   for pos, line in lines do
     if pos.line > selection.end_line then break end
