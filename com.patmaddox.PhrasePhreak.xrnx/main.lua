@@ -55,7 +55,7 @@ local function extract_phrase()
   for i=1, 120 do
     local status, result = pcall(can_insert_phrase_at, i)
 
-    if status == false then -- eww, what's the right way?
+    if not status then
       break
     end
 
