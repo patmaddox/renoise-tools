@@ -17,6 +17,7 @@
 --- what happens if you select multiple tracks?
 --- phrase extraction - pattern, column
 
+-- NOTES
 -- renoise.song().patterns[].tracks[]:lines_in_range(index_from, index_to)
 -- renoise.song().patterns[].tracks[].lines[]:copy_from(
 --   other renoise.PatternLine object)
@@ -29,6 +30,29 @@
 --   -> [iterator with pos, line (renoise.PatternLine object)]
 -- renoise.song().selected_pattern_index
 -- renoise.song().selected_track_index
+
+local options = renoise.Document.create("PhrasePhreak") { }
+renoise.tool().preferences = options
+
+renoise.tool():add_menu_entry {
+  name = "--- Main Menu:Tools:PhrasePhreak:Extract Phrase",
+  invoke = function() extract_phrase() end
+}
+
+renoise.tool():add_keybinding {
+  name = "Pattern Editor:Selection:PhrasePhreak - Extract phrase",
+  invoke = function() extract_phrase() end
+}
+
+-- LOCAL FUNCTIONS
+--- no_selection_error()
+--- no_available_phrase_error()
+--- can_insert_phrase_at(i)
+--- next_available_phrase_index()
+--- prepare_phrase_at_index(phrase_index)
+--- copy_selected_lines_to_phrase(selection, phrase)
+--- the_selection()
+--- extract_phrase()
 
 local function no_selection_error()
   renoise.app():show_error("Please select some notes in the pattern editor!")
@@ -126,7 +150,7 @@ local function the_selection()
   }
 end
 
-local function extract_phrase()
+function extract_phrase()
   local selection = the_selection()
 
   if selection == nil then
@@ -144,16 +168,3 @@ local function extract_phrase()
   local phrase = prepare_phrase_at_index(phrase_index)
   copy_selected_lines_to_phrase(selection, phrase)
 end
-
-local options = renoise.Document.create("PhrasePhreak") { }
-renoise.tool().preferences = options
-
-renoise.tool():add_menu_entry {
-  name = "--- Main Menu:Tools:PhrasePhreak:Extract Phrase",
-  invoke = extract_phrase
-}
-
-renoise.tool():add_keybinding {
-  name = "Pattern Editor:Selection:PhrasePhreak - Extract phrase",
-  invoke = extract_phrase
-}
