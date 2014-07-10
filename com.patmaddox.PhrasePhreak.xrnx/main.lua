@@ -8,13 +8,14 @@
 --- phrases are one note only
 --- set pattern length & lpb based on selection
 --- save configured key bindings
+--- extract block loop to phrase
 
 -- TODO
 --- explode phrase to pattern
 --- explode pattern w/ different LPB
 --- use previous phrase note range length
 --- what happens if you select multiple tracks?
---- phrase extraction - pattern, column, selection, loop
+--- phrase extraction - pattern, column
 
 -- renoise.song().patterns[].tracks[]:lines_in_range(index_from, index_to)
 -- renoise.song().patterns[].tracks[].lines[]:copy_from(
@@ -77,27 +78,51 @@ end
 local function copy_selected_lines_to_phrase(selection, phrase)
   phrase.number_of_lines = selection.number_of_lines
 
-  local pin = renoise.song().selected_pattern_index
-  local tin = renoise.song().selected_track_index
-  local lines = renoise.song().pattern_iterator:lines_in_pattern_track(pin, tin)
-
-  for pos, line in lines do
+  for pos, line in selection.lines do
     if pos.line > selection.end_line then break end
     if pos.line >= selection.start_line then
-
-      local phrase_line = phrase:line(pos.line)
+      local phrase_line = phrase:line(pos.line - selection.offset)
       phrase_line:copy_from(line)
     end
   end
 end
 
 local function the_selection()
-  local selection = renoise.song().selection_in_pattern
+  local start_line = nil
+  local end_line = nil
+  local number_of_lines = nil
+  local pattern_index = nil
+  local block_loop_coeff = nil
+
+  if renoise.song().transport.loop_block_enabled then
+    local loop_block_start_pos = renoise.song().transport.loop_block_start_pos
+    start_line = loop_block_start_pos.line
+    block_loop_coeff = renoise.song().transport.loop_block_range_coeff
+    pattern_index = renoise.song().sequencer:pattern(loop_block_start_pos.sequence)
+  else
+    local selection = renoise.song().selection_in_pattern
+    end_line = selection.end_line
+    start_line = selection.start_line
+    pattern_index = renoise.song().selected_pattern_index
+  end
+
+  local tin = renoise.song().selected_track_index
+  local lines = renoise.song().pattern_iterator:lines_in_pattern_track(pattern_index, tin)
+
+  if block_loop_coeff then
+    local pattern = renoise.song():pattern(pattern_index)
+    number_of_lines = pattern.number_of_lines / block_loop_coeff
+    end_line = start_line - 1 + number_of_lines
+  else
+    number_of_lines = end_line - start_line + 1
+  end
 
   return {
-    end_line = selection.end_line,
-    start_line = selection.start_line,
-    number_of_lines = selection.end_line - selection.start_line + 1
+    start_line = start_line,
+    end_line = end_line,
+    number_of_lines = number_of_lines,
+    lines = lines,
+    offset = start_line - 1
   }
 end
 
