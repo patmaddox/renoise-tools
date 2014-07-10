@@ -13,6 +13,7 @@
 --- explode pattern w/ different LPB
 --- use previous phrase note range length
 --- what happens if you select multiple tracks?
+--- extract phrase from looped section
 
 -- renoise.song().patterns[].tracks[]:lines_in_range(index_from, index_to)
 -- renoise.song().patterns[].tracks[].lines[]:copy_from(
