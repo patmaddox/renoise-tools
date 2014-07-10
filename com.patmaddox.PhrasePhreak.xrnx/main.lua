@@ -7,14 +7,14 @@
 --- use the next open note for phrase
 --- phrases are one note only
 --- set pattern length & lpb based on selection
+--- save configured key bindings
 
 -- TODO
 --- explode phrase to pattern
 --- explode pattern w/ different LPB
 --- use previous phrase note range length
 --- what happens if you select multiple tracks?
---- extract phrase from looped section
---- save configured key bindings (or is that just a dev thing?)
+--- phrase extraction - pattern, column, selection, loop
 
 -- renoise.song().patterns[].tracks[]:lines_in_range(index_from, index_to)
 -- renoise.song().patterns[].tracks[].lines[]:copy_from(
@@ -119,6 +119,9 @@ end
 -- explode_phrase()
 
 -- extract_phrase()
+
+local options = renoise.Document.create("PhrasePhreak") { }
+renoise.tool().preferences = options
 
 renoise.tool():add_menu_entry {
   name = "--- Main Menu:Tools:PhrasePhreak:Extract Phrase",
