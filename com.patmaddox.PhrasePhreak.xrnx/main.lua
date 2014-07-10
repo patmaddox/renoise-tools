@@ -92,8 +92,14 @@ local function copy_selected_lines_to_phrase(phrase)
   end
 end
 
+local function the_selection()
+  return renoise.song().selection_in_pattern
+end
+
 local function extract_phrase()
-  if renoise.song().selection_in_pattern == nil then
+  local selection = the_selection()
+
+  if selection == nil then
     no_selection_error()
     return nil
   end
