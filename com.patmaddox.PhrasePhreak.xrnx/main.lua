@@ -61,8 +61,10 @@ local function next_available_phrase_index()
 end
 
 local function prepare_phrase_at_index(phrase_index)
+  renoise.song().selected_instrument:insert_phrase_at(phrase_index)
   local phrase = renoise.song().selected_instrument:phrase(phrase_index)
   phrase:clear()
+  phrase.lpb = renoise.song().transport.lpb
 
   local mapping = phrase.mapping
   local base_note = phrase_index - 1
@@ -70,6 +72,24 @@ local function prepare_phrase_at_index(phrase_index)
   mapping.note_range = {base_note, base_note}
 
   return phrase
+end
+
+local function copy_selected_lines_to_phrase(phrase)
+  local selection = renoise.song().selection_in_pattern
+  phrase.number_of_lines = selection.end_line - selection.start_line + 1
+
+  local pin = renoise.song().selected_pattern_index
+  local tin = renoise.song().selected_track_index
+  local lines = renoise.song().pattern_iterator:lines_in_pattern_track(pin, tin)
+
+  for pos, line in lines do
+    if pos.line > selection.end_line then break end
+    if pos.line >= selection.start_line then
+
+      local phrase_line = phrase:line(pos.line)
+      phrase_line:copy_from(line)
+    end
+  end
 end
 
 local function extract_phrase()
@@ -85,25 +105,8 @@ local function extract_phrase()
     return nil
   end
 
-  renoise.song().selected_instrument:insert_phrase_at(phrase_index)
-
   local phrase = prepare_phrase_at_index(phrase_index)
-  local selection = renoise.song().selection_in_pattern
-  phrase.number_of_lines = selection.end_line - selection.start_line + 1
-  phrase.lpb = renoise.song().transport.lpb
-
-  local pin = renoise.song().selected_pattern_index
-  local tin = renoise.song().selected_track_index
-  local lines = renoise.song().pattern_iterator:lines_in_pattern_track(pin, tin)
-
-  for pos, line in lines do
-    if pos.line > selection.end_line then break end
-    if pos.line >= selection.start_line then
-
-      local phrase_line = phrase:line(pos.line)
-      phrase_line:copy_from(line)
-    end
-  end
+  copy_selected_lines_to_phrase(phrase)
 end
 
 local function explode_phrase()
