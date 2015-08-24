@@ -9,7 +9,7 @@ local function attenuate_sample(sample)
   sample.volume = attenuation;
 end
 
-local function on_samples_changed(instrument, context)
+local function on_samples(instrument, context)
   rprint(context);
   if context and context.type == "insert" then
     local sample = instrument:sample(context.index);
@@ -18,8 +18,8 @@ local function on_samples_changed(instrument, context)
 end
 
 local function add_on_samples(instrument)
-  if not instrument.samples_observable:has_notifier(on_samples_changed) then
-    instrument.samples_observable:add_notifier(instrument, on_samples_changed);
+  if not instrument.samples_observable:has_notifier(on_samples) then
+    instrument.samples_observable:add_notifier(instrument, on_samples);
   end
 end
 
