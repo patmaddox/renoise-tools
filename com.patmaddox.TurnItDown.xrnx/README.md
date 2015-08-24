@@ -6,5 +6,6 @@
 
 ## TODO
 
-* Make the attenuation factor configurable
+* Make the attenuation factor configurable (based on preview volume?)
 * Apply it to instruments as well? xrni & plugins...
+* Be smarter about attenuating... don't do it if the sample is already quiet
