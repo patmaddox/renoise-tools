@@ -1,5 +1,7 @@
 # Because not everything has to hit 0 dB.
 
+Automatically attenuates samples by 12 dB when added to a Renoise project.
+
 ## Known bugs
 
 * Doesn't attentuate samples When "create multi sampled instruments is enabled" and you drag multiple samples to the sample list
