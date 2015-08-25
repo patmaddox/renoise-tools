@@ -1,5 +1,6 @@
 -- TurnItDown
 -- Pat Maddox
+-- https://github.com/patmaddox/renoise-tools/tree/master/com.patmaddox.TurnItDown.xrnx
 
 -- local options = renoise.Document.create("TurnItDown") { }
 -- renoise.tool().preferences = options
