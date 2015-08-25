@@ -1,10 +1,10 @@
 # Because not everything has to hit 0 dB.
 
-Automatically attenuates samples by 12 dB when added to a Renoise project.
+Creates sample headroom by automatically attenuating samples by 12 dB when added to a Renoise project.
 
-You can think of this as a tool to create "sample headroom" as opposed to the "track headroom" configuration setting. The sample's volume is attenuated before hitting any instrument fx.
+What's the difference between this and the track headroom setting? Sample headroom creates headroom before hitting any instrument fx, whereas track headroom comes after the entire instrument fx chain.
 
-In the sample editor, the sample is automatically attenuated only when the disk browser is open (so you can duplicate samples without changing their volume).
+In the sample editor tab, samples are automatically attenuated only when the disk browser is open (so you can duplicate samples without changing their volume).
 
 When rendering to a sample, it should not adjust the new sample's volume at all.
 
