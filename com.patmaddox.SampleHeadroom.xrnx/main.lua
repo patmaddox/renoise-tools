@@ -1,6 +1,6 @@
--- TurnItDown
+-- SampleHeadroom
 -- Pat Maddox
--- https://github.com/patmaddox/renoise-tools/tree/master/com.patmaddox.TurnItDown.xrnx
+-- https://github.com/patmaddox/renoise-tools/tree/master/com.patmaddox.SampleHeadroom.xrnx
 
 local function attenuate_sample(sample)
   local attenuation = 0.25118863582611; -- -12.00 dB
@@ -79,4 +79,3 @@ end
 if not renoise.tool().app_new_document_observable:has_notifier(on_song_created) then
   renoise.tool().app_new_document_observable:add_notifier(on_song_created);
 end
-

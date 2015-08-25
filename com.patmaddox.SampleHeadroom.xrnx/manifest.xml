@@ -33,7 +33,7 @@
   <!-- You don't have to use prefixes like com/org and so on, but please try to use -->
   <!-- something personal, like your name, or your homepage domain or company name in -->
   <!-- the Id in order to make it as unique as possible. -->
-  <Id>com.patmaddox.TurnItDown</Id>
+  <Id>com.patmaddox.SampleHeadroom</Id>
 
 
   <!-- The author field is only used in descriptions of the tools, or in error messages  -->
@@ -46,7 +46,7 @@
   <Category>In Progress</Category>
 
   <!-- Name of the tool, as visible to the user -->
-  <Name>TurnItDown</Name>
+  <Name>Sample Headroom</Name>
 
   <!-- Description of the tool as visible to the users -->
   <Description>Turns down sample volumes.</Description>
