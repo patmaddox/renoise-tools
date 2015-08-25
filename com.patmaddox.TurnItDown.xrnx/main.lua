@@ -34,11 +34,16 @@ local function on_instrument_added(context)
   end
 end
 
-local function on_song_created()
+local function set_up_instrument_handlers()
   renoise.song().instruments_observable:add_notifier(on_instrument_added);
+
   for i, instrument in ipairs(renoise.song().instruments) do
     add_on_samples(instrument);
   end
+end
+
+local function on_song_created()
+  set_up_instrument_handlers();
 end
 
 -- add new song observer
