@@ -2,9 +2,6 @@
 -- Pat Maddox
 -- https://github.com/patmaddox/renoise-tools/tree/master/com.patmaddox.TurnItDown.xrnx
 
--- local options = renoise.Document.create("TurnItDown") { }
--- renoise.tool().preferences = options
-
 local function attenuate_sample(sample)
   local attenuation = 0.25118863582611; -- -12.00 dB
   sample.volume = attenuation;
