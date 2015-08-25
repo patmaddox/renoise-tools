@@ -9,17 +9,22 @@ local function attenuate_sample(sample)
   sample.volume = attenuation;
 end
 
-local function on_samples(instrument, context)
-  rprint(context);
+local function on_samples(context)
   if context and context.type == "insert" then
-    local sample = instrument:sample(context.index);
+    local sample = renoise.song().selected_instrument:sample(context.index);
     attenuate_sample(sample);
   end
 end
 
 local function add_on_samples(instrument)
   if not instrument.samples_observable:has_notifier(on_samples) then
-    instrument.samples_observable:add_notifier(instrument, on_samples);
+    instrument.samples_observable:add_notifier(on_samples);
+  end
+end
+
+local function remove_on_samples(instrument)
+  if instrument.samples_observable:has_notifier(on_samples) then
+    instrument.samples_observable:remove_notifier(on_samples);
   end
 end
 
@@ -42,8 +47,30 @@ local function set_up_instrument_handlers()
   end
 end
 
+local function remove_instrument_handlers()
+  if renoise.song().instruments_observable:has_notifier(on_instrument_added) then
+    renoise.song().instruments_observable:remove_notifier(on_instrument_added);
+  end
+
+  for i, instrument in ipairs(renoise.song().instruments) do
+    remove_on_samples(instrument);
+  end
+end
+
+local function on_disk_browser()
+  if renoise.app().window.disk_browser_is_visible then
+    set_up_instrument_handlers();
+  else
+    remove_instrument_handlers();
+  end
+end
+
 local function on_song_created()
-  set_up_instrument_handlers();
+  if not renoise.app().window.disk_browser_is_visible_observable:has_notifier(on_disk_browser) then
+    renoise.app().window.disk_browser_is_visible_observable:add_notifier(on_disk_browser);
+  end
+
+  on_disk_browser();
 end
 
 -- add new song observer
