@@ -65,12 +65,16 @@ local function on_disk_browser()
   end
 end
 
-local function on_song_created()
+local function set_up_on_disk_browser()
   if not renoise.app().window.disk_browser_is_visible_observable:has_notifier(on_disk_browser) then
     renoise.app().window.disk_browser_is_visible_observable:add_notifier(on_disk_browser);
   end
 
   on_disk_browser();
+end
+
+local function on_song_created()
+  set_up_on_disk_browser();
 end
 
 -- add new song observer
