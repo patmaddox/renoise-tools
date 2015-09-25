@@ -35,13 +35,24 @@ local function midi_note_to_name(midi_note)
   return keys[key + 1] .. "-" .. octave
 end
 
+local function display_mappings()
+  local mapping = renoise.song().selected_sample.sample_mapping
+    
+  local base_note = mapping.base_note
+  vb.views.base.text = midi_note_to_name(base_note)
+    
+  local low_note = mapping.note_range[1]
+  vb.views.low.text = midi_note_to_name(low_note)
+    
+  local high_note = mapping.note_range[2]
+  vb.views.high.text = midi_note_to_name(high_note)
+end
+
 local function key_handler(dialog, key)
   if key_to_set then
     if key.note then
       local note = key.note
       local octave = renoise.song().transport.octave
-      local note_name = keys[key.note + 1] .. octave
-      vb.views[key_to_set].text = note_name
       
       local sample = renoise.song().selected_sample
       if sample then
@@ -52,16 +63,21 @@ local function key_handler(dialog, key)
           mapping.base_note = midi_note
         elseif key_to_set == "low" then
           local high = mapping.note_range[2]
+          if midi_note > high then high = midi_note end
           mapping.note_range = {midi_note, high}
         elseif key_to_set == "high" then
           local low = mapping.note_range[1]
+          if midi_note < low then low = midi_note end
           mapping.note_range = {low, midi_note}
         end
       end
+      
+      display_mappings()
+      key_to_set = nil
     end
-    
-    key_to_set = nil
   end
+  
+  return key
 end
 
 function show_dialog()
@@ -74,23 +90,13 @@ function show_dialog()
 
   local dialog_title = "Place Sample"
   
-  local base_note_name = nil
-  local low_note_name = nil
-  local high_note_name = nil
-  
   local sample = renoise.song().selected_sample
 
   if sample then
-    local mapping = sample.sample_mapping
     
-    local base_note = mapping.base_note
-    base_note_name = midi_note_to_name(base_note)
-    
-    local low_note = mapping.note_range[1]
-    low_note_name = midi_note_to_name(low_note)
-    
-    local high_note = mapping.note_range[2]
-    high_note_name = midi_note_to_name(high_note)
+  else
+    renoise.app():show_error("You must select a sample!")
+    return
   end
   
   local dialog_content = vb:column {
@@ -103,8 +109,7 @@ function show_dialog()
       },
       
       vb:text {
-        id = "base",
-        text = base_note_name
+        id = "base"
       }
     },
     
@@ -115,8 +120,7 @@ function show_dialog()
       },
       
       vb:text {
-        id = "low",
-        text = low_note_name
+        id = "low"
       }
     },
     
@@ -127,11 +131,12 @@ function show_dialog()
       },
       
       vb:text {
-        id = "high",
-        text = high_note_name
+        id = "high"
       }
     }
   }
+  
+  display_mappings()
   
   local dialog = renoise.app():show_custom_dialog(
     dialog_title, dialog_content, key_handler)
