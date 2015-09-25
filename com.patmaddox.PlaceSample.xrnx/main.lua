@@ -29,6 +29,12 @@ local keys = {
   "B#"
 }
 
+local function midi_note_to_name(midi_note)
+  local octave = math.floor(midi_note / 12)
+  local key = midi_note % 12
+  return keys[key + 1] .. "-" .. octave
+end
+
 local function key_handler(dialog, key)
   if key_to_set then
     if key.note then
@@ -66,17 +72,26 @@ function show_dialog()
  
   vb = renoise.ViewBuilder()
 
-  local DEFAULT_DIALOG_MARGIN = 
-    renoise.ViewBuilder.DEFAULT_DIALOG_MARGIN
-  local DEFAULT_CONTROL_SPACING = 
-    renoise.ViewBuilder.DEFAULT_CONTROL_SPACING
-  local DEFAULT_BUTTON_HEIGHT =
-    renoise.ViewBuilder.DEFAULT_DIALOG_BUTTON_HEIGHT   
-  local TEXT_ROW_WIDTH = 100
-  local WIDE = 180
-
   local dialog_title = "Place Sample"
-  local dialog_buttons = {"Close"};
+  
+  local base_note_name = nil
+  local low_note_name = nil
+  local high_note_name = nil
+  
+  local sample = renoise.song().selected_sample
+
+  if sample then
+    local mapping = sample.sample_mapping
+    
+    local base_note = mapping.base_note
+    base_note_name = midi_note_to_name(base_note)
+    
+    local low_note = mapping.note_range[1]
+    low_note_name = midi_note_to_name(low_note)
+    
+    local high_note = mapping.note_range[2]
+    high_note_name = midi_note_to_name(high_note)
+  end
   
   local dialog_content = vb:column {
     vb:row {
@@ -88,7 +103,8 @@ function show_dialog()
       },
       
       vb:text {
-        id = "base"
+        id = "base",
+        text = base_note_name
       }
     },
     
@@ -99,7 +115,8 @@ function show_dialog()
       },
       
       vb:text {
-        id = "low"
+        id = "low",
+        text = low_note_name
       }
     },
     
@@ -110,7 +127,8 @@ function show_dialog()
       },
       
       vb:text {
-        id = "high"
+        id = "high",
+        text = high_note_name
       }
     }
   }
