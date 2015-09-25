@@ -9,6 +9,7 @@ local tool_name = "Place Sample"
 -- local dialog = nil
 local vb = nil
 local key_to_set = nil
+local dialog = nil
 
 function get_note(note_type)
   key_to_set = note_type
@@ -79,6 +80,8 @@ local function key_handler(dialog, key)
     end
   end
   
+  if key.name == "esc" then dialog:close() end
+  
   return key
 end
 
@@ -140,7 +143,7 @@ function show_dialog()
   
   display_mappings()
   
-  local dialog = renoise.app():show_custom_dialog(
+  dialog = renoise.app():show_custom_dialog(
     dialog_title, dialog_content, key_handler)
 end
 
