@@ -2,4 +2,4 @@
 
 tools I make for renoise!
 
-https://lab.patmaddox.com/pat/renoise-tools
+https://github.com/patmaddox/renoise-tools/
