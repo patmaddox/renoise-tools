@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RenoiseScriptingTool doc_version="0">
+  <Name>Place Sample</Name>
+  <Id>com.patmaddox.PlaceSample</Id>
+  <Version>1</Version>
+  <ApiVersion>4</ApiVersion>
+  <Author>Pat Maddox | pat@patmaddox.com</Author>
+  <AutoUpgraded>false</AutoUpgraded>
+  <Category>In Progress</Category>
+  <Description>Place samples quickly.</Description>
+  <Homepage>http://github.com/patmaddox/renoise-tools/tree/master/com.patmaddox.PlaceSample.xrnx</Homepage>
+  <Platform/>
+  <Icon/>
+</RenoiseScriptingTool>
