@@ -78,6 +78,12 @@ local function key_handler(dialog, key)
       display_mappings()
       key_to_set = nil
     end
+  elseif key.name == "1" then
+    get_note("base")
+  elseif key.name == "2" then
+    get_note("low")
+  elseif key.name == "3" then
+    get_note("high")
   end
   
   if key.name == "esc" then
@@ -109,7 +115,7 @@ function show_dialog()
   local dialog_content = vb:column {
     vb:row {
       vb:button {
-        text = "Base Note",
+        text = "(1) Base",
         notifier = function()
           get_note("base")
         end
@@ -122,7 +128,7 @@ function show_dialog()
     
     vb:row {
       vb:button {
-        text = "Low note",
+        text = "(2) Low",
         notifier = function() get_note("low") end
       },
       
@@ -133,7 +139,7 @@ function show_dialog()
     
     vb:row {
       vb:button {
-        text = "High note",
+        text = "(3) High",
         notifier = function() get_note("high") end
       },
       
