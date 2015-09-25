@@ -4,14 +4,49 @@ _AUTO_RELOAD_DEBUG = function()
   show_dialog()
 end
 
-local dialog = nil
+-- local dialog = nil
 local vb = nil
+local key_to_set = nil
+
+function get_note(note_type)
+  key_to_set = vb.views[note_type]
+  key_to_set.text = "type a key..."
+end
+
+local keys = {
+  "C",
+  "C#",
+  "D",
+  "D#",
+  "E",
+  "F",
+  "F#",
+  "G",
+  "G#",
+  "A",
+  "A#",
+  "B",
+  "B#"
+}
+
+local function key_handler(dialog, key)
+  if key_to_set then
+    if key.note then
+      local note = key.note
+      local octave = renoise.song().transport.octave
+      local note_name = keys[key.note + 1] .. "-" .. octave
+      key_to_set.text = note_name
+    end
+    
+    key_to_set = nil
+  end
+end
 
 function show_dialog()
-  if dialog and dialog.visible then
-    dialog:show()
-    return
-  end
+--  if dialog and dialog.visible then
+--    dialog:show()
+--    return
+--  end
  
   vb = renoise.ViewBuilder()
 
@@ -30,11 +65,14 @@ function show_dialog()
   local dialog_content = vb:column {
     vb:row {
       vb:button {
-        text = "Base Note"
+        text = "Base Note",
+        notifier = function()
+          get_note("base")
+        end
       },
       
       vb:text {
-        text = "da base"
+        id = "base"
       }
     },
     
@@ -44,7 +82,7 @@ function show_dialog()
       },
       
       vb:text {
-        text = "low"
+        id = "low"
       }
     },
     
@@ -54,17 +92,11 @@ function show_dialog()
       },
       
       vb:text {
-        text = "high"
-      }
-    },
-    
-    vb:row {
-      vb:text {
-        text = "hello"
+        id = "high"
       }
     }
   }
   
-  dialog = renoise.app():show_custom_dialog(
-    dialog_title, dialog_content)
+  local dialog = renoise.app():show_custom_dialog(
+    dialog_title, dialog_content, key_handler)
 end
