@@ -80,7 +80,9 @@ local function key_handler(dialog, key)
     end
   end
   
-  if key.name == "esc" then dialog:close() end
+  if key.name == "esc" then
+    dialog:close()
+  end
   
   return key
 end
@@ -156,3 +158,13 @@ renoise.tool():add_keybinding {
   name = "Sample Keyzones:Tools:" .. tool_name,
   invoke = show_dialog
 }
+
+local function on_sample_change()
+  if dialog and dialog.visible then
+    display_mappings()
+  end
+end
+
+if not renoise.song().selected_sample_observable:has_notifier(on_sample_change) then
+  renoise.song().selected_sample_observable:add_notifier(on_sample_change)
+end
