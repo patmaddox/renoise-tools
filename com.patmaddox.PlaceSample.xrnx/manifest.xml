@@ -2,7 +2,7 @@
 <RenoiseScriptingTool doc_version="0">
   <Name>Place Sample</Name>
   <Id>com.patmaddox.PlaceSample</Id>
-  <Version>0.1</Version>
+  <Version>0.2</Version>
   <ApiVersion>4</ApiVersion>
   <Author>Pat Maddox | pat@patmaddox.com</Author>
   <AutoUpgraded>false</AutoUpgraded>
