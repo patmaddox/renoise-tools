@@ -34,8 +34,15 @@ local function key_handler(dialog, key)
     if key.note then
       local note = key.note
       local octave = renoise.song().transport.octave
-      local note_name = keys[key.note + 1] .. "-" .. octave
+      local note_name = keys[key.note + 1] .. octave
       key_to_set.text = note_name
+      
+      local sample = renoise.song().selected_sample
+      if sample then
+        local mapping = sample.sample_mapping
+        local midi_note = (octave * 12) + note
+        mapping.base_note = midi_note
+      end
     end
     
     key_to_set = nil
