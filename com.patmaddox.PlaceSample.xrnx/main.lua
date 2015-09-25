@@ -1,8 +1,10 @@
 -- Reload the script whenever this file is saved. 
 -- Additionally, execute the attached function.
 _AUTO_RELOAD_DEBUG = function()
-  show_dialog()
+  -- show_dialog()
 end
+
+local tool_name = "Place Sample"
 
 -- local dialog = nil
 local vb = nil
@@ -141,3 +143,13 @@ function show_dialog()
   local dialog = renoise.app():show_custom_dialog(
     dialog_title, dialog_content, key_handler)
 end
+
+renoise.tool():add_menu_entry {
+  name = "Sample Navigator:"..tool_name,
+  invoke = show_dialog
+}
+
+renoise.tool():add_keybinding {
+  name = "Sample Keyzones:Tools:" .. tool_name,
+  invoke = show_dialog
+}
