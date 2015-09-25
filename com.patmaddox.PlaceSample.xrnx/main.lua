@@ -171,6 +171,17 @@ local function on_sample_change()
   end
 end
 
-if not renoise.song().selected_sample_observable:has_notifier(on_sample_change) then
-  renoise.song().selected_sample_observable:add_notifier(on_sample_change)
+local function set_up_on_sample_change()
+  if not renoise.song().selected_sample_observable:has_notifier(on_sample_change) then
+    renoise.song().selected_sample_observable:add_notifier(on_sample_change)
+  end
+end
+
+local function on_song_created()
+  set_up_on_sample_change()
+end
+
+-- add new song observer
+if not renoise.tool().app_new_document_observable:has_notifier(on_song_created) then
+  renoise.tool().app_new_document_observable:add_notifier(on_song_created);
 end
