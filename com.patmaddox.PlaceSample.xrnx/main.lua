@@ -6,7 +6,6 @@ end
 
 local tool_name = "Place Sample"
 
--- local dialog = nil
 local vb = nil
 local key_to_set = nil
 local dialog = nil
