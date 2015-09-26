@@ -12,21 +12,7 @@ local key_to_set = nil
 local dialog = nil
 local devices = {}
 
-local keys = {
-  "C",
-  "C#",
-  "D",
-  "D#",
-  "E",
-  "F",
-  "F#",
-  "G",
-  "G#",
-  "A",
-  "A#",
-  "B",
-  "B#"
-}
+local keys = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B", "B#"}
 
 local function midi_note_to_name(midi_note)
   local octave = math.floor(midi_note / 12)
