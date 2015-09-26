@@ -1,7 +1,7 @@
 -- Reload the script whenever this file is saved. 
 -- Additionally, execute the attached function.
 _AUTO_RELOAD_DEBUG = function()
-  -- show_dialog()
+  --show_dialog()
 end
 
 local tool_name = "Place Sample"
@@ -10,11 +10,7 @@ local tool_name = "Place Sample"
 local vb = nil
 local key_to_set = nil
 local dialog = nil
-
-function get_note(note_type)
-  key_to_set = note_type
-  vb.views[key_to_set].text = "type a key..."
-end
+local devices = {}
 
 local keys = {
   "C",
@@ -51,32 +47,69 @@ local function display_mappings()
   vb.views.high.text = midi_note_to_name(high_note)
 end
 
+local function close_midi_devices()
+  if devices then
+    for i, device in ipairs(devices) do
+      device:close()
+    end
+
+    devices = nil
+  end
+end
+
+local function map_midi_note(midi_note)
+  local sample = renoise.song().selected_sample
+
+  if sample then
+    local mapping = sample.sample_mapping
+
+    if key_to_set == "base" then
+      mapping.base_note = midi_note
+    elseif key_to_set == "low" then
+      local high = mapping.note_range[2]
+      if midi_note > high then high = midi_note end
+      mapping.note_range = {midi_note, high}
+    elseif key_to_set == "high" then
+      local low = mapping.note_range[1]
+      if midi_note < low then low = midi_note end
+      mapping.note_range = {low, midi_note}
+    end
+
+    display_mappings()
+    close_midi_devices()
+    key_to_set = nil
+  end
+end
+
+local function midi_handler(message)
+  if message[1] == 144 then
+    map_midi_note(message[2])
+  end
+end
+
+local function open_midi_devices()
+  devices = {}
+
+  for i, device_name in ipairs(renoise.Midi.available_input_devices()) do
+    local device = renoise.Midi.create_input_device(device_name, midi_handler)
+    devices[#devices + 1] = device
+  end
+end
+
+local function get_note(note_type)
+  open_midi_devices()
+  key_to_set = note_type
+  vb.views[key_to_set].text = "type a key..."
+end
+
 local function key_handler(dialog, key)
   if key_to_set then
     if key.note then
       local note = key.note
       local octave = renoise.song().transport.octave
+      local midi_note = (octave * 12) + note
       
-      local sample = renoise.song().selected_sample
-      if sample then
-        local mapping = sample.sample_mapping
-        local midi_note = (octave * 12) + note
-        
-        if key_to_set == "base" then
-          mapping.base_note = midi_note
-        elseif key_to_set == "low" then
-          local high = mapping.note_range[2]
-          if midi_note > high then high = midi_note end
-          mapping.note_range = {midi_note, high}
-        elseif key_to_set == "high" then
-          local low = mapping.note_range[1]
-          if midi_note < low then low = midi_note end
-          mapping.note_range = {low, midi_note}
-        end
-      end
-      
-      display_mappings()
-      key_to_set = nil
+      map_midi_note(midi_note)
     end
   elseif key.name == "1" then
     get_note("base")
@@ -94,11 +127,6 @@ local function key_handler(dialog, key)
 end
 
 function show_dialog()
---  if dialog and dialog.visible then
---    dialog:show()
---    return
---  end
- 
   vb = renoise.ViewBuilder()
 
   local dialog_title = "Place Sample"
