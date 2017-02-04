@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RenoiseScriptingTool doc_version="0">
+  <ApiVersion>5</ApiVersion>
+  <AutoUpgraded>false</AutoUpgraded>
+  <Id>com.patmaddox.PLAYFROM</Id>
+  <Version>0.1</Version>
+  <Author>Pat Maddox | pat@patmaddox.com</Author>
+  <Name>PLAYFROM</Name>
+  <Category>In Progress</Category>
+  <Description>Play from a specific part of your song.</Description>
+  <Homepage>http://github.com/patmaddox/renoise-tools/tree/master/com.patmaddox.PLAYFROM.xrnx</Homepage>
+</RenoiseScriptingTool>
