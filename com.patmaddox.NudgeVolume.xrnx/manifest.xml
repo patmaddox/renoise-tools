@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RenoiseScriptingTool doc_version="0">
+  <ApiVersion>5</ApiVersion>
+  <AutoUpgraded>false</AutoUpgraded>
+  <Id>com.patmaddox.NudgeVolume</Id>
+  <Version>0.1</Version>
+  <Author>Pat Maddox | pat@patmaddox.com</Author>
+  <Name>PLAYFROM</Name>
+  <Category>In Progress</Category>
+  <Description>Nudge volume of a track in 3 dB increments.</Description>
+  <Homepage>http://github.com/patmaddox/renoise-tools/tree/master/com.patmaddox.NudgeVolume.xrnx</Homepage>
+</RenoiseScriptingTool>
