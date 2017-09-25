@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RenoiseScriptingTool doc_version="0">
+  <ApiVersion>5</ApiVersion>
+  <AutoUpgraded>false</AutoUpgraded>
+  <Id>com.patmaddox.VelocityPlus</Id>
+  <Version>0.1</Version>
+  <Author>Pat Maddox | pat@patmaddox.com</Author>
+  <Name>Velocity Plus</Name>
+  <Category>In Progress</Category>
+  <Description>Adjust the midi keyboard velocity for new notes.</Description>
+  <Homepage>http://github.com/patmaddox/renoise-tools/tree/master/com.patmaddox.VelocityPlus.xrnx</Homepage>
+</RenoiseScriptingTool>
